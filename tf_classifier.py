@@ -242,15 +242,13 @@ def optimize(num_iterations):
         # Get a batch of training examples.
         # x_batch now holds a batch of images and
         # y_true_batch are the true labels for those images.
-        #x_batch, y_true_batch = random_batch(data, labels)
+        x_batch, y_true_batch = random_batch(data, labels)
 
 
         # Put the batch into a dict with the proper names
         # for placeholder variables in the TensorFlow graph.
-        #feed_dict_train = {x: x_batch,
-        #                   y_true: y_true_batch}
-        feed_dict_train = {x: data,
-                           y_true: labels}
+        # feed_dict_train = {x: data,
+        #                   y_true: labels}
 
         # Run the optimizer using this batch of training data.
         # TensorFlow assigns the variables in feed_dict_train
