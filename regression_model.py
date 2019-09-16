@@ -92,10 +92,3 @@ class RegressionModel:
         ax.set_ylabel('Training Loss')
         ax.set_xlabel('Iterations')
         ax.legend()
-
-
-
-
-
-
-
