@@ -1,10 +1,6 @@
-import os, sys
-from cxsParser import HirshfeldSurface as hs
-import matplotlib.pyplot as plt
-import matplotlib.colors as cols
+import os
+from perovskite.cxsParser import HirshfeldSurface as hs
 import numpy as np
-import cv2
-
 
 ROOT_DIR = os.getcwd()
 PEROV_DIR = os.path.join(ROOT_DIR, 'perovskite')

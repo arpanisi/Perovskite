@@ -23,16 +23,18 @@ class RegressionModel:
         self.model = Sequential()
         self.model.add(Conv2D(32, kernel_size=(3, 3), activation='relu',
                           input_shape=(32, 32, 1)))
-        self.model.add(BatchNormalization(axis=-1))
-        self.model.add(MaxPooling2D(pool_size=(2, 2)))
         self.model.add(Conv2D(32, kernel_size=(3, 3), activation='relu'))
-        self.model.add(BatchNormalization(axis=-1))
         self.model.add(MaxPooling2D(pool_size=(2, 2)))
-        self.model.add(Dropout(0.5))
+        self.model.add(BatchNormalization(axis=-1))
+        self.model.add(Conv2D(32, kernel_size=(3, 3), activation='relu'))
+        self.model.add(MaxPooling2D(pool_size=(2, 2)))
+        self.model.add(BatchNormalization(axis=-1))
         self.model.add(Flatten())
         self.model.add(Dense(16, activation='relu'))
+        self.model.add(Dropout(0.2))
         self.model.add(BatchNormalization(axis=-1))
         self.model.add(Dense(4, activation='relu'))
+        self.model.add(Dropout(0.2))
         self.model.add(BatchNormalization(axis=-1))
         self.model.add(Dense(1))
 
@@ -45,7 +47,7 @@ class RegressionModel:
     def r_squared(self, X_test, y_test):
 
         y_true = y_test
-        y_pred = self.model.predict(X_test)
+        y_pred = self.model.predict(X_test).reshape(len(y_true))
         SS_res = np.sum((y_true - y_pred) ** 2)
         SS_T = np.sum((y_true - np.mean(y_true)) ** 2)
 
@@ -58,12 +60,14 @@ class RegressionModel:
 
         return np.abs(e) > tol
 
-    def save_model(self, value=None, weight_file=None):
+    def save_model(self, value=None, filename=None, weight_file=None):
 
         if value is None:
             raise ValueError('Must pass value name')
         model_json = self.model.to_json()
-        with open('regression_model_'+value+'.json', 'w') as json_file:
+        if filename is None:
+            filename = 'regression_model_'+value+'.json'
+        with open(filename, 'w') as json_file:
             json_file.write(model_json)
 
         if weight_file is None:

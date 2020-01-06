@@ -1,4 +1,4 @@
-from funcs import *
+from .funcs import *
 from os.path import dirname, join
 
 

@@ -1,6 +1,4 @@
-import os
 import pandas as pd
-from cxsParser import HirshfeldSurface as hs
 import numpy as np
 
 
