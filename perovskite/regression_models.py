@@ -11,7 +11,7 @@ from keras.utils import plot_model
 import numpy as np
 import json
 from sklearn.model_selection import train_test_split
-
+import os
 
 class RegressionModel:
 
@@ -88,14 +88,14 @@ class RegressionModel:
             raise ValueError('Must pass value name')
         model_json = self.model.to_json()
         if filename is None:
-            filename = 'regression_model_'+value+'.json'
+            filename = os.path.join('model_weights', 'regression_model_'+value+'.json')
         with open(filename, 'w') as json_file:
             json_file.write(model_json)
 
         if weight_file is None:
             return
 
-        self.model.save_weights('regression_model_'+value+'.h5')
+        self.model.save_weights( os.path.join('model_weights','regression_model_'+value+'.h5'))
 
     def from_json_file(self, json_file_name=None, weight_file_name=None):
 
