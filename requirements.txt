@@ -1,0 +1,5 @@
+keras
+tensorflow-gpu==1.8.0
+vispy
+seaborn
+matplotlib
