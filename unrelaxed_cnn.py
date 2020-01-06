@@ -24,8 +24,18 @@ results = pd.DataFrame({'Names': cxs_names, 'Observed':y_true, 'Predicted': y_pr
 
 results.to_excel('Formation_Energy_results.xlsx')
 
+from perovskite import Activation
+img_tensor = X[0]
+
+img_tensor = img_tensor.reshape(1, 32, 32, 1)
+
+act = Activation(model=model)
+hm = act.generate_heatmap(img_tensor)
+
 r, _, _ = model.r_squared(X, y, split_size=0.3)
 print(r)
+
+model.save_model('formation')
 
 import seaborn as sns
 
