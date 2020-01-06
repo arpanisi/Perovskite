@@ -1,8 +1,9 @@
 import numpy as np
+import pandas as pd
 
-cxs_names = np.load('unrelaxed_cxs_names.npy')
-X = np.load('unrelaxed_cxs.npy')
-y = np.load('unrelexed_energies.npy')
+cxs_names = np.load('data/unrelaxed_cxs_names.npy')
+X = np.load('data/unrelaxed_cxs.npy')
+y = np.load('data/unrelexed_energies.npy')
 
 X = X.reshape(X.shape[0], X.shape[1], X.shape[2], 1)
 y_max = np.max(y)
@@ -11,21 +12,21 @@ y /= y_max
 
 from perovskite import RegressionModel as RM
 
-regression = RM()
-regression.build_model()
-regression.compile_regression_model()
+model = RM()
+model.compile_regression_model()
 
-from sklearn.model_selection import train_test_split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
+history, r_sq = model.fit(X, y, test_size=0.3)
 
-history = regression.model.fit(X_train, y_train, verbose=1,
-                                batch_size=1000, epochs=200,
-                                validation_data=(X_test, y_test))
+y_true = y * y_max
+y_pred_scaled = model.predict(X).reshape(len(y))
+y_pred = y_pred_scaled * y_max
+results = pd.DataFrame({'Names': cxs_names, 'Observed':y_true, 'Predicted': y_pred})
 
-r, _, _ = regression.r_squared(X_test, y_test)
+results.to_excel('Formation_Energy_results.xlsx')
+
+r, _, _ = model.r_squared(X, y, split_size=0.3)
 print(r)
 
 import seaborn as sns
-y_pred = regression.model.predict(X).reshape(len(X))
 
-sns.jointplot(y, y_pred)
+sns.jointplot('Observed', 'Predicted', data=results)
